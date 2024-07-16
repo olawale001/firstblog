@@ -1,0 +1,9 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    <h1>Post Detail</h1>
+    <h3>Title: {{ post.title }}</h3>
+    <img src="{{'post_image.url' }}" alt="{{post.title}}">
+    <p><strong>Content</strong>{{ post.content }}</p>
+    <p><strong>Author</strong>: {{ post.author.username }}</p>
+    <p><strong>Uploaded</strong>: {{ post.created_at }}</p>
+{% endblock %}    

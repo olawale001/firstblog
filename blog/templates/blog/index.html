@@ -1,0 +1,17 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+    <h1>Blog Post</h1> 
+    <h2>{{ post.title }}</h2>
+    {% if user.is_authenticated %}
+    <h3>Welcome back {{ user }}</h3>
+    {% else %}
+    <h3>Welcome</h3>
+    {% endif %}
+    <ol>
+        {% for post in posts %}
+       <a href="{% url 'post_detail' post.pk %}"><li><strong>{{ post.title }}</strong> by <strong>{{ post.author.username }}</strong> </li></a>
+        {% endfor %}
+    </ol>
+
+{% endblock %}    
+    
