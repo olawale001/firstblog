@@ -1,9 +1,53 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-    <h1>Post Detail</h1>
+<div class="text-center">
+
+    <h1 class="text-info">Post Detail</h1>
     <h3>Title: {{ post.title }}</h3>
-    <img src="{{'post_image.url' }}" alt="{{post.title}}">
-    <p><strong>Content</strong>{{ post.content }}</p>
+    <img src="{{ post.image.url }}" alt="{{post.title}}" width="200" height="200">
+    <p><strong>Content</strong>: {{ post.content }}</p>
     <p><strong>Author</strong>: {{ post.author.username }}</p>
     <p><strong>Uploaded</strong>: {{ post.created_at }}</p>
-{% endblock %}    
+    {% if user.is_authenticated and user == post.author %}
+    <a class="btn btn-info" href="{% url 'post_edit' post.pk %}">Edit Post</a><br><br>
+    <form action="{% url 'post_delete' post.pk %}" method="post">
+        {% csrf_token %}
+        <input class="btn btn-info" type="submit" value="Delete Post">
+    </form>
+    {% endif %}
+    <h3 class="text-info">comment:</h3>
+    <ol>
+        {% for comment in comments %}
+        <li>{{ comment.author.username }} : {{ comment.comment }}</li>
+        {% if user == comment.author%}
+        <form action="{% url 'comment_delete' comment.pk %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-info" type="submit">delete comment</button>
+        </form>
+        {% endif %}
+        
+        <ol>
+            {% for reply in comment.replies.all %}
+            <li>{{ reply.author.username }} : {{ reply.reply }}</li>
+            {% if user == reply.author %}
+            <form action="{% url 'reply_delete' reply.pk %}" method="post">
+                {% csrf_token %}
+                <button class="btn btn-info" type="submit">delete reply</button>
+            </form>
+            {% endif %}
+            {% endfor %}
+        </ol> 
+        
+        <form action="{% url 'add_reply' comment.pk %}" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-info" type="submit">reply</button>
+        </form>
+        {% endfor %} 
+    </ol>
+    
+    <a class="btn btn-info" href="{% url 'add_comment' post.pk  %}">Comment</a>
+    
+    
+</div>
+    {% endblock %}

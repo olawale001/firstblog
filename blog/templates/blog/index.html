@@ -1,17 +1,27 @@
 {% extends 'blog/base.html' %}
 {% block content %}
-    <h1>Blog Post</h1> 
+    <h1 class="text-info">Blog Post</h1> 
     <h2>{{ post.title }}</h2>
     {% if user.is_authenticated %}
     <h3>Welcome back {{ user }}</h3>
     {% else %}
     <h3>Welcome</h3>
     {% endif %}
-    <ol>
-        {% for post in posts %}
-       <a href="{% url 'post_detail' post.pk %}"><li><strong>{{ post.title }}</strong> by <strong>{{ post.author.username }}</strong> </li></a>
-        {% endfor %}
-    </ol>
-
-{% endblock %}    
-    
+    <div class="row">
+      {% for post in posts %}
+      <div class="col-md-4">
+        <div class="card md-2">
+          {% if post.image %}
+          <img class="card-img-top" src="{{ post.image.url }}">
+          {% endif %}
+          <div class="card-body">
+            <h4 class="card-title text-info">{{ post.title }}</h4>
+            <p class="card-text text-info">{{ post.author.username }}</p>
+            <a href="{% url 'post_detail' post.pk %}" class="card-link btn btn-info">Learn More</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endblock %}    
+  

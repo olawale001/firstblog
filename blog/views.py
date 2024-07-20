@@ -47,3 +47,74 @@ def post_new(req):
     else:
         form = PostForm()
     return render(req, 'blog/post_edit.html', {'form': form})
+
+
+@login_required
+def post_edit(req, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    if req.method == 'POST':
+        form = PostForm(req.POST, req.FILES, instance=post)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = req.user
+            post.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = PostForm(instance=post)
+    return render(req, 'blog/post_edit.html', {'form': form})
+
+
+@login_required
+def post_delete(req, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    post.delete()
+    return redirect('home')
+
+
+@login_required
+def comment_delete(req, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if req.method == 'POST':
+        comment.delete()
+    return redirect('post_detail', comment.post.pk)
+
+@login_required
+def reply_delete(req, reply_pk):
+    reply = get_object_or_404(Reply, pk=reply_pk)
+    if req.method == 'POST':
+        reply.delete()
+    return redirect('post_detail', pk=reply.comment.post.pk)
+
+@login_required
+def add_comment(req, pk):
+    post = get_object_or_404(BlogPost, pk=pk)
+    if req.method == 'POST':
+        form = CommentForm(req.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.author = req.user
+            comment.save()
+            return redirect('post_detail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(req, 'blog/add_comment.html', {'form': form, 'post': post})
+
+
+def add_reply(req, comment_pk):
+    comment = get_object_or_404(Comment, pk=comment_pk)
+    if req.method == 'POST':
+        form = ReplyForm(req.POST)
+        if form.is_valid():
+            reply = form.save(commit=False)
+            reply.comment = comment
+            reply.author = req.user
+            reply.save()
+            return redirect('post_detail', pk=comment.post.pk)
+    else:
+        form = ReplyForm()
+    return render(req, 'blog/add_reply.html', {'form': form, 'comment': comment})
+    
+
+
+
