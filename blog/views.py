@@ -19,7 +19,6 @@ def home(req):
     posts = BlogPost.objects.all()
     return render(req, 'blog/index.html', {'posts': posts})
 
-
 def post_detail(req, pk):
     post = get_object_or_404(BlogPost, pk=pk)
     comments = Comment.objects.filter(post=post)

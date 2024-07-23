@@ -1,0 +1,10 @@
+{% extends 'blog/base.html' %}
+{% block content %}
+
+<h1>Reply</h1>
+<form action="{% url 'reply_delete' reply.pk %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">reply</button>
+</form>
+{% endblock %}
