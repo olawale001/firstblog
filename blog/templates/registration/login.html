@@ -5,15 +5,7 @@
 <h1 class="text-info">Login</h1>
 <form action="" method="post">
     {% csrf_token %}
-    <label for="username">Username</label>
-    <input type="text" id="username" name="username"><br>
-    <label for="password">Password</label>
-    <input type="password" id="password" name="password"><br>
-    <div class="form-check mb-3">
-    <label class="form-check-label">
-      <input class="form-check-input" type="checkbox" name="remember"> Remember me
-    </label>
-  </div>
+    {{ form.as_p }}
     <button class="btn bg-info" type="submit">Login</button>
 </form>
 
