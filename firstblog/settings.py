@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [firstblog.onrender.com]
+ALLOWED_HOSTS = ['https://firstblog.onrender.com']
 
 
 # Application definition
